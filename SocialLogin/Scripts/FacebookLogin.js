@@ -29,18 +29,19 @@
         FB.api('/me?fields=email,name', function (response) {
             console.log(response.name);
             console.log(response.email);
-            //$.ajax({
-            //    url: "/SocialLogin.ashx?name=" + response.name + "&email=" + response.email,
-            //    type: "POST",
-            //    data: { 'token': accessToken },
-            //    success: function (data) {
-            //        $('#loginPopup').html('<span class="text-success"><i class="fa fa-spinner fa-spin"></i>Đang xử lý...</span>');
-            //        location.reload();
-            //    },
-            //    error: function (data) {
-            //        console.log(data);
-            //    }
-            //})
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            $.ajax({
+                url: "/Home/AccessUser",
+                headers: { "__RequestVerificationToken": token },
+                type: "POST",
+                data: { 'name': response.name, 'email': response.email },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            })
         });
     }
 
