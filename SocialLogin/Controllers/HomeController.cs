@@ -10,14 +10,24 @@ namespace SocialLogin.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.UserName = Convert.ToString(Session["UserName"]);
             return View();
         }
 
         [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult AccessUser(string name, string email)
+        public JsonResult Login(string name, string email)
         {
+            Session["UserName"] = email;
+            return Json(new { success = "True" });
+        }
 
-            return Json(new { UserName = "khanhthuy@gmail.com" });
+        [HttpGet]
+        public JsonResult LogOut()
+        {
+            Session.Abandon();
+            return Json(new { success = "True" });
         }
     }
+
+
 }

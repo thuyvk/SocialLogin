@@ -2,9 +2,36 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>Demo Login facebook</h1>
-    <p class="lead">The sample about how to integrated Facebook Login to your website</p>
-    <p><a href="javascript:;" class="btn btn-primary btn-lg lbtSignInFacebook">LOGIN FACEBOOK</a></p>
-</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="jumbotron">
+        <h1>Demo Login facebook</h1>
+        <p class="lead">The sample about how to integrated Facebook Login to your website</p>
+        @if (string.IsNullOrEmpty(ViewBag.UserName))
+        {
+            <p><a href="javascript:;" class="btn btn-primary btn-lg lbtSignInFacebook">LOGIN FACEBOOK</a></p>
+        }
+        else
+        {
+            <table>
+                <tr>
+                    <td>User:</td>
+                    <td>
+                        @ViewBag.UserName
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="javascript:;" class="btn btn-danger lbtLogOutFacebook">Log Out</a>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+}
+
+@section scripts{
+    <script src="~/Scripts/FacebookLogin.js"></script>
+}
 

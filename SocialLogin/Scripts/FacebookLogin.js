@@ -1,8 +1,16 @@
 ﻿$(document).ready(function () {
     'use strict';
-    var accessToken = $('#hdCLIENTID').val();
 
-    //******* facebook api **************
+    // Load the SDK asynchronously
+    (function (d) {
+        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        ref.parentNode.insertBefore(js, ref);
+
+    }(document));
+
     window.fbAsyncInit = function () {
         FB.init({
             appId: '1974007189550279', // App ID
@@ -27,11 +35,9 @@
 
     function getFacebookUserInfo() {
         FB.api('/me?fields=email,name', function (response) {
-            console.log(response.name);
-            console.log(response.email);
             var token = $('input[name="__RequestVerificationToken"]').val();
             $.ajax({
-                url: "/Home/AccessUser",
+                url: "/Home/Login",
                 headers: { "__RequestVerificationToken": token },
                 type: "POST",
                 data: { 'name': response.name, 'email': response.email },
@@ -49,17 +55,22 @@
         FB.logout(function () { document.location.reload(); });
     }
 
-    // Load the SDK asynchronously
-    (function (d) {
-        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-        if (d.getElementById(id)) { return; }
-        js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        ref.parentNode.insertBefore(js, ref);
-
-    }(document));
 
     $('.lbtSignInFacebook').click(function () {
         Login();
+    })
+
+    $('.lbtLogOutFacebook').click(function () {
+        Logout();
+        $.ajax({
+            url: "/Home/LogOut",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        })
     })
 });
