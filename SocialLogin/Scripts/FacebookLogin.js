@@ -42,7 +42,10 @@
                 type: "POST",
                 data: { 'name': response.name, 'email': response.email },
                 success: function (data) {
-                    console.log(data);
+                    if(data.success === "True")
+                    {
+                        location.reload();
+                    }
                 },
                 error: function (data) {
                     console.log(data);
@@ -62,11 +65,15 @@
 
     $('.lbtLogOutFacebook').click(function () {
         Logout();
+        var token = $('input[name="__RequestVerificationToken"]').val();
         $.ajax({
             url: "/Home/LogOut",
-            type: "GET",
+            headers: { "__RequestVerificationToken": token },
+            type: "POST",
             success: function (data) {
-                console.log(data);
+                if (data.success === "True") {
+                    location.reload();
+                }
             },
             error: function (data) {
                 console.log(data);
